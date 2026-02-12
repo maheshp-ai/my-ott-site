@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamIt | OTT Pro</title>
+    <title>StreamIt | Dummy OTT</title>
     <link rel="stylesheet" href="style.css">
     <script src='//cdnt.netcoresmartech.com/smartechclient.js'></script>
     <script>
@@ -15,29 +15,29 @@
 </head>
 <body>
 
-    <header>
+    <header id="top">
         <div class="navbar">
             <h1>Stream<span>It</span></h1>
             <div class="search-container">
                 <input type="text" id="searchBar" placeholder="Search movies..." onkeyup="searchMovies()">
             </div>
         </div>
-        <button id="shuffleAllBtn" onclick="initSite()">🔀 Shuffle Rows</button>
+        <button id="shuffleAllBtn" onclick="initSite()">🔀 Shuffle Content</button>
     </header>
 
     <main id="main-content">
         <section class="category" id="new-releases">
-            <h2 id="head-new">New Releases</h2>
+            <h2>New Releases</h2>
             <div class="movie-grid"></div>
         </section>
 
         <section class="category" id="continue-watching">
-            <h2 id="head-continue">Continue Watching</h2>
+            <h2>Continue Watching</h2>
             <div class="movie-grid"></div>
         </section>
 
         <section class="category" id="recommended">
-            <h2 id="head-recommended">Recommended for You</h2>
+            <h2>Recommended for You</h2>
             <div class="movie-grid"></div>
         </section>
     </main>
@@ -49,10 +49,12 @@
             <p id="modalDesc"></p>
             <div class="video-placeholder">
                 <div class="play-icon">▶</div>
-                <p>Streaming Content Ready</p>
+                <p>Content Ready to Stream</p>
             </div>
         </div>
     </div>
+
+    <button id="backToTop" title="Go to top" onclick="scrollToTop()">↑</button>
 
     <script src="script.js"></script>
 </body>
