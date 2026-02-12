@@ -19,6 +19,8 @@ const movieData = {
     ]
 };
 
+let watchlist = [];
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -31,13 +33,14 @@ function getRandomRating() {
     return (Math.random() * (4.8 - 3.5) + 3.5).toFixed(1);
 }
 
-function createMovieCard(movie) {
+function createMovieCard(movie, isWatchlist = false) {
     const rating = getRandomRating();
     const imageUrl = `https://picsum.photos/seed/${movie.id}/400/225`;
+    const likedClass = watchlist.some(m => m.id === movie.id) ? 'liked' : '';
     
     return `
-        <div class="movie-card" id="${movie.id}">
-            <button class="like-btn" onclick="toggleLike(this, '${movie.id}')">❤</button>
+        <div class="movie-card" id="${isWatchlist ? 'wl-' : ''}${movie.id}">
+            <button class="like-btn ${likedClass}" onclick="toggleWatchlist('${movie.id}')">❤</button>
             <div class="rating">★ ${rating}</div>
             <img src="${imageUrl}" alt="${movie.title}">
             <div class="card-details">
@@ -49,24 +52,38 @@ function createMovieCard(movie) {
     `;
 }
 
-// Like Button Functionality
-function toggleLike(btn, id) {
-    btn.classList.toggle('liked');
-    console.log(`Movie ID ${id} liked state changed.`);
+function toggleWatchlist(movieId) {
+    // Find movie in any category
+    let movie;
+    for (const cat in movieData) {
+        const found = movieData[cat].find(m => m.id === movieId);
+        if (found) { movie = found; break; }
+    }
+
+    const index = watchlist.findIndex(m => m.id === movieId);
+    if (index === -1) {
+        watchlist.push(movie); // Add to list
+    } else {
+        watchlist.splice(index, 1); // Remove from list
+    }
+
+    updateWatchlistUI();
+    initSite(); // Re-render main categories to sync the heart colors
 }
 
-// Scroll to Top Logic
-window.onscroll = function() {
-    const mybutton = document.getElementById("backToTop");
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-        mybutton.style.display = "block";
+function updateWatchlistUI() {
+    const wlSection = document.getElementById('my-list');
+    const wlGrid = wlSection.querySelector('.movie-grid');
+    
+    if (watchlist.length > 0) {
+        wlSection.style.display = 'block';
+        wlGrid.innerHTML = "";
+        watchlist.forEach(movie => {
+            wlGrid.innerHTML += createMovieCard(movie, true);
+        });
     } else {
-        mybutton.style.display = "none";
+        wlSection.style.display = 'none';
     }
-};
-
-function scrollToTop() {
-    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function initSite() {
@@ -74,36 +91,35 @@ function initSite() {
         const grid = document.querySelector(`#${category} .movie-grid`);
         if (!grid) continue;
         grid.innerHTML = ""; 
-        const shuffled = shuffleArray([...movieData[category]]);
-        shuffled.forEach(movie => {
+        const items = [...movieData[category]]; // We aren't shuffling here to keep UI stable during "likes"
+        items.forEach(movie => {
             grid.innerHTML += createMovieCard(movie);
         });
     }
 }
 
+// Search, Modal, and Scroll logic remains same
 function searchMovies() {
     const query = document.getElementById('searchBar').value.toLowerCase();
-    const cards = document.querySelectorAll('.movie-card');
-    cards.forEach(card => {
+    document.querySelectorAll('.movie-card').forEach(card => {
         const title = card.querySelector('h3').innerText.toLowerCase();
         card.style.display = title.includes(query) ? "block" : "none";
     });
 }
 
 function openModal(title, desc) {
-    const modal = document.getElementById('movieModal');
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalDesc').innerText = desc;
-    modal.style.display = 'block';
+    document.getElementById('movieModal').style.display = 'block';
 }
 
-function closeModal() {
-    document.getElementById('movieModal').style.display = 'none';
-}
+function closeModal() { document.getElementById('movieModal').style.display = 'none'; }
 
-window.onclick = function(event) {
-    const modal = document.getElementById('movieModal');
-    if (event.target == modal) closeModal();
-}
+window.onscroll = function() {
+    const btn = document.getElementById("backToTop");
+    btn.style.display = (window.scrollY > 300) ? "block" : "none";
+};
+
+function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
 
 initSite();
