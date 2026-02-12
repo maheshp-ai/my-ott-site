@@ -1,26 +1,24 @@
 const movieData = {
     'new-releases': [
-        { title: 'The Void', desc: 'Space adventure.', id: 201 },
-        { title: 'Neon City', desc: 'Cyberpunk life.', id: 202 },
-        { title: 'Skyline', desc: 'Urban exploration.', id: 203 },
-        { title: 'Midnight', desc: 'Thriller in the dark.', id: 204 },
-        { title: 'Future Boy', desc: 'Sci-fi drama.', id: 205 }
+        { title: 'The Void', desc: 'Space adventure.', id: 'tile-001' },
+        { title: 'Neon City', desc: 'Cyberpunk life.', id: 'tile-002' },
+        { title: 'Skyline', desc: 'Urban exploration.', id: 'tile-003' },
+        { title: 'Midnight', desc: 'Thriller in the dark.', id: 'tile-004' },
+        { title: 'Future Boy', desc: 'Sci-fi drama.', id: 'tile-005' }
     ],
     'continue-watching': [
-        { title: 'Lost Woods', desc: 'Mystery thriller.', id: 206 },
-        { title: 'Deep Blue', desc: 'Underwater journey.', id: 207 },
-        { title: 'The Peak', desc: 'Climbing documentary.', id: 208 },
-        { title: 'Echoes', desc: 'Haunted pasts.', id: 213 }
+        { title: 'Lost Woods', desc: 'Mystery thriller.', id: 'tile-006' },
+        { title: 'Deep Blue', desc: 'Underwater journey.', id: 'tile-007' },
+        { title: 'The Peak', desc: 'Climbing documentary.', id: 'tile-008' }
     ],
     'recommended': [
-        { title: 'Chef Life', desc: 'Reality cooking.', id: 209 },
-        { title: 'Speedway', desc: 'Racing drama.', id: 210 },
-        { title: 'The Loop', desc: 'Time travel mystery.', id: 211 },
-        { title: 'Wildlife', desc: 'Nature docuseries.', id: 212 }
+        { title: 'Chef Life', desc: 'Reality cooking.', id: 'tile-009' },
+        { title: 'Speedway', desc: 'Racing drama.', id: 'tile-010' },
+        { title: 'The Loop', desc: 'Time travel mystery.', id: 'tile-011' },
+        { title: 'Wildlife', desc: 'Nature docuseries.', id: 'tile-012' }
     ]
 };
 
-// Shuffle function
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -33,13 +31,14 @@ function getRandomRating() {
     return (Math.random() * (4.8 - 3.5) + 3.5).toFixed(1);
 }
 
-// Card Creation with unique ID tag
+// THIS FUNCTION NOW EXPLICITLY BINDS THE ID TO THE TILE
 function createMovieCard(movie) {
     const rating = getRandomRating();
     const imageUrl = `https://picsum.photos/seed/${movie.id}/400/225`;
     
     return `
-        <div class="movie-card" id="movie-${movie.id}">
+        <div class="movie-card" id="${movie.id}">
+            <div class="id-tag">ID: ${movie.id}</div>
             <div class="rating">★ ${rating}</div>
             <img src="${imageUrl}" alt="${movie.title}">
             <div class="card-details">
@@ -55,10 +54,7 @@ function initSite() {
     for (const category in movieData) {
         const grid = document.querySelector(`#${category} .movie-grid`);
         grid.innerHTML = ""; 
-        
-        // Shuffle the copy of the array
         const shuffled = shuffleArray([...movieData[category]]);
-        
         shuffled.forEach(movie => {
             grid.innerHTML += createMovieCard(movie);
         });
@@ -85,9 +81,4 @@ function closeModal() {
     document.getElementById('movieModal').style.display = 'none';
 }
 
-window.onclick = function(event) {
-    if (event.target == document.getElementById('movieModal')) closeModal();
-}
-
-// Initial Shuffle on Load
 initSite();
