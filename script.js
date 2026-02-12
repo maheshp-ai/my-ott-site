@@ -20,11 +20,7 @@ const movieData = {
     ]
 };
 
-// --- NEW SHUFFLE LOGIC ---
-/**
- * Fisher-Yates Shuffle Algorithm
- * Randomizes the order of elements in an array
- */
+// Shuffle function
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -37,12 +33,13 @@ function getRandomRating() {
     return (Math.random() * (4.8 - 3.5) + 3.5).toFixed(1);
 }
 
+// Card Creation with unique ID tag
 function createMovieCard(movie) {
     const rating = getRandomRating();
     const imageUrl = `https://picsum.photos/seed/${movie.id}/400/225`;
     
     return `
-        <div class="movie-card">
+        <div class="movie-card" id="movie-${movie.id}">
             <div class="rating">★ ${rating}</div>
             <img src="${imageUrl}" alt="${movie.title}">
             <div class="card-details">
@@ -59,10 +56,10 @@ function initSite() {
         const grid = document.querySelector(`#${category} .movie-grid`);
         grid.innerHTML = ""; 
         
-        // Shuffle the specific category array before displaying
-        const shuffledCategory = shuffleArray([...movieData[category]]);
+        // Shuffle the copy of the array
+        const shuffled = shuffleArray([...movieData[category]]);
         
-        shuffledCategory.forEach(movie => {
+        shuffled.forEach(movie => {
             grid.innerHTML += createMovieCard(movie);
         });
     }
@@ -80,6 +77,7 @@ function searchMovies() {
 function openModal(title, desc) {
     const modal = document.getElementById('movieModal');
     document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalDesc').innerText = desc;
     modal.style.display = 'block';
 }
 
@@ -87,5 +85,9 @@ function closeModal() {
     document.getElementById('movieModal').style.display = 'none';
 }
 
-// Initial Load
+window.onclick = function(event) {
+    if (event.target == document.getElementById('movieModal')) closeModal();
+}
+
+// Initial Shuffle on Load
 initSite();
