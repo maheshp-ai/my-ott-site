@@ -1,23 +1,21 @@
 const movieData = {
     'new-releases': [
-        { title: 'The Silent Sea', desc: 'A mission on the moon.', id: 101 },
-        { title: 'Cyber Drift', desc: 'Neon racing in the future.', id: 102 },
-        { title: 'Red Notice', desc: 'Art thieves and agents.', id: 103 },
-        { title: 'Outer Banks', desc: 'Hunting for lost gold.', id: 104 },
-        { title: 'Extraction', desc: 'High-stakes rescue mission.', id: 110 }
+        { title: 'The Void', desc: 'Space adventure.', id: 201 },
+        { title: 'Neon City', desc: 'Cyberpunk life.', id: 202 },
+        { title: 'Skyline', desc: 'Urban exploration.', id: 203 },
+        { title: 'Midnight', desc: 'Thriller in the dark.', id: 204 },
+        { title: 'Future Boy', desc: 'Sci-fi drama.', id: 205 }
     ],
     'continue-watching': [
-        { title: 'Stranger Things', desc: 'S4: E5 Mystery in Hawkins.', id: 105 },
-        { title: 'The Witcher', desc: 'S2: E1 Monster hunting.', id: 106 },
-        { title: 'The Crown', desc: 'S5: E2 Royal drama.', id: 111 },
-        { title: 'Mindhunter', desc: 'S1: E4 Profiling killers.', id: 112 }
+        { title: 'Lost Woods', desc: 'Mystery thriller.', id: 206 },
+        { title: 'Deep Blue', desc: 'Underwater journey.', id: 207 },
+        { title: 'The Peak', desc: 'Climbing documentary.', id: 208 }
     ],
     'recommended': [
-        { title: 'Dark', desc: 'Time travel and secrets.', id: 107 },
-        { title: 'Inception', desc: 'Stealing dreams.', id: 108 },
-        { title: 'Arcane', desc: 'Steampunk sisterhood.', id: 109 },
-        { title: 'Peaky Blinders', desc: 'Gangsters in Birmingham.', id: 113 },
-        { title: 'Black Mirror', desc: 'Tech gone wrong.', id: 114 }
+        { title: 'Chef Life', desc: 'Reality cooking.', id: 209 },
+        { title: 'Speedway', desc: 'Racing drama.', id: 210 },
+        { title: 'The Loop', desc: 'Time travel mystery.', id: 211 },
+        { title: 'Wildlife', desc: 'Nature docuseries.', id: 212 }
     ]
 };
 
@@ -31,7 +29,7 @@ function createMovieCard(movie) {
     
     return `
         <div class="movie-card">
-            <div class="rating">⭐ ${rating}</div>
+            <div class="rating">★ ${rating}</div>
             <img src="${imageUrl}" alt="${movie.title}">
             <div class="card-details">
                 <h3>${movie.title}</h3>
@@ -45,7 +43,7 @@ function createMovieCard(movie) {
 function initSite() {
     for (const category in movieData) {
         const grid = document.querySelector(`#${category} .movie-grid`);
-        grid.innerHTML = ""; // Clear existing
+        grid.innerHTML = ""; 
         movieData[category].forEach(movie => {
             grid.innerHTML += createMovieCard(movie);
         });
@@ -64,16 +62,11 @@ function searchMovies() {
 function openModal(title, desc) {
     const modal = document.getElementById('movieModal');
     document.getElementById('modalTitle').innerText = title;
-    document.getElementById('modalDesc').innerText = desc;
     modal.style.display = 'block';
 }
 
 function closeModal() {
     document.getElementById('movieModal').style.display = 'none';
-}
-
-window.onclick = function(event) {
-    if (event.target == document.getElementById('movieModal')) closeModal();
 }
 
 initSite();
