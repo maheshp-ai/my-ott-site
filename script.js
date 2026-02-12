@@ -31,14 +31,13 @@ function getRandomRating() {
     return (Math.random() * (4.8 - 3.5) + 3.5).toFixed(1);
 }
 
-// THIS FUNCTION NOW EXPLICITLY BINDS THE ID TO THE TILE
 function createMovieCard(movie) {
     const rating = getRandomRating();
     const imageUrl = `https://picsum.photos/seed/${movie.id}/400/225`;
     
+    // The ID is assigned here as an HTML attribute only.
     return `
         <div class="movie-card" id="${movie.id}">
-            <div class="id-tag">ID: ${movie.id}</div>
             <div class="rating">★ ${rating}</div>
             <img src="${imageUrl}" alt="${movie.title}">
             <div class="card-details">
@@ -53,6 +52,7 @@ function createMovieCard(movie) {
 function initSite() {
     for (const category in movieData) {
         const grid = document.querySelector(`#${category} .movie-grid`);
+        if (!grid) continue;
         grid.innerHTML = ""; 
         const shuffled = shuffleArray([...movieData[category]]);
         shuffled.forEach(movie => {
@@ -79,6 +79,11 @@ function openModal(title, desc) {
 
 function closeModal() {
     document.getElementById('movieModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('movieModal');
+    if (event.target == modal) closeModal();
 }
 
 initSite();
