@@ -9,7 +9,8 @@ const movieData = {
     'continue-watching': [
         { title: 'Lost Woods', desc: 'Mystery thriller.', id: 206 },
         { title: 'Deep Blue', desc: 'Underwater journey.', id: 207 },
-        { title: 'The Peak', desc: 'Climbing documentary.', id: 208 }
+        { title: 'The Peak', desc: 'Climbing documentary.', id: 208 },
+        { title: 'Echoes', desc: 'Haunted pasts.', id: 213 }
     ],
     'recommended': [
         { title: 'Chef Life', desc: 'Reality cooking.', id: 209 },
@@ -18,6 +19,19 @@ const movieData = {
         { title: 'Wildlife', desc: 'Nature docuseries.', id: 212 }
     ]
 };
+
+// --- NEW SHUFFLE LOGIC ---
+/**
+ * Fisher-Yates Shuffle Algorithm
+ * Randomizes the order of elements in an array
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 function getRandomRating() {
     return (Math.random() * (4.8 - 3.5) + 3.5).toFixed(1);
@@ -44,7 +58,11 @@ function initSite() {
     for (const category in movieData) {
         const grid = document.querySelector(`#${category} .movie-grid`);
         grid.innerHTML = ""; 
-        movieData[category].forEach(movie => {
+        
+        // Shuffle the specific category array before displaying
+        const shuffledCategory = shuffleArray([...movieData[category]]);
+        
+        shuffledCategory.forEach(movie => {
             grid.innerHTML += createMovieCard(movie);
         });
     }
@@ -69,4 +87,5 @@ function closeModal() {
     document.getElementById('movieModal').style.display = 'none';
 }
 
+// Initial Load
 initSite();
