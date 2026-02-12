@@ -35,9 +35,9 @@ function createMovieCard(movie) {
     const rating = getRandomRating();
     const imageUrl = `https://picsum.photos/seed/${movie.id}/400/225`;
     
-    // The ID is assigned here as an HTML attribute only.
     return `
         <div class="movie-card" id="${movie.id}">
+            <button class="like-btn" onclick="toggleLike(this, '${movie.id}')">❤</button>
             <div class="rating">★ ${rating}</div>
             <img src="${imageUrl}" alt="${movie.title}">
             <div class="card-details">
@@ -47,6 +47,26 @@ function createMovieCard(movie) {
             </div>
         </div>
     `;
+}
+
+// Like Button Functionality
+function toggleLike(btn, id) {
+    btn.classList.toggle('liked');
+    console.log(`Movie ID ${id} liked state changed.`);
+}
+
+// Scroll to Top Logic
+window.onscroll = function() {
+    const mybutton = document.getElementById("backToTop");
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+};
+
+function scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function initSite() {
