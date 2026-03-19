@@ -11,9 +11,24 @@
         smartech('register', '91cfa1a62819861ea6592e9ca59ebf45');
         smartech('identify', '');
         smartech('dispatch','page browse',{});
+        if ('Hansel' in window) {
+         regListenr()
+          } else {
+            window.addEventListener('pxSdkReady', () => {
+                 regListenr()
+         })
+       }
+        function regListenr() {
+         window.Hansel.registerListener(hanselEventsListener);
+        }
     </script>
 </head>
 <body>
+    <script>
+    function hanselEventsListener(eventName, eventData) {
+    smartech('dispatch', eventName, eventData)
+    };
+    </script>
 
     <header id="top">
         <div class="navbar">
